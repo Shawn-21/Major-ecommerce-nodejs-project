@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - All Orders</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .order-card {
+            border-radius: 12px;
+        }
+
+        .order-card:hover {
+            transform: scale(1.01);
+            transition: 0.2s;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand">Admin Panel</span>
+    <div>
+        <a href="/admin/dashboard" class="btn btn-secondary btn-sm me-2">
+            Dashboard
+        </a>
+        <a href="/logout" class="btn btn-danger btn-sm">
+            Logout
+        </a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+
+    <h3 class="mb-4">All Orders 🧾</h3>
+
+    <% if (orders.length === 0) { %>
+        <div class="alert alert-info">
+            No orders found.
+        </div>
+    <% } %>
+
+    <% orders.forEach(order => { %>
+
+        <div class="card shadow mb-4 p-4 order-card">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Order ID:</strong> <%= order._id %></p>
+                    <p><strong>User:</strong> <%= order.user.name %></p>
+                    <p><strong>Email:</strong> <%= order.user.email %></p>
+                    <p><strong>Date:</strong> <%= order.createdAt.toDateString() %></p>
+                    <p><strong>Address:</strong> <%= order.address %></p>
+                    <p><strong>Phone:</strong> <%= order.phone %></p>
+                </div>
+
+                <div class="col-md-6 text-md-end">
+                    <h5>Total: ₹ <%= order.totalAmount %></h5>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="badge 
+                        <%= order.status === 'Order Placed' ? 'bg-warning text-dark' :
+                            order.status === 'Shipped' ? 'bg-info' :
+                            'bg-success' %>">
+                            <%= order.status %>
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <hr>
+
+            <h6>Products:</h6>
+            <ul class="list-group mb-3">
+                <% order.items.forEach(item => { %>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>
+                            <%= item.name %> (x<%= item.quantity %>)
+                        </span>
+                        <span>
+                            ₹ <%= item.price * item.quantity %>
+                        </span>
+                    </li>
+                <% }) %>
+            </ul>
+
+            <!-- Update Order Status Form -->
+            <form action="/admin/update-order/<%= order._id %>" method="POST">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-4">
+                        <select name="status" class="form-select">
+                            <option value="Order Placed"
+                                <%= order.status === "Order Placed" ? "selected" : "" %>>
+                                Order Placed
+                            </option>
+                            <option value="Shipped"
+                                <%= order.status === "Shipped" ? "selected" : "" %>>
+                                Shipped
+                            </option>
+                            <option value="Delivered"
+                                <%= order.status === "Delivered" ? "selected" : "" %>>
+                                Delivered
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <button class="btn btn-primary btn-sm">
+                            Update Status
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    <% }) %>
+
+</div>
+
+</body>
+</html>

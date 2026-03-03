@@ -1,0 +1,55 @@
+<%- include('../partials/header', { user }) %>
+
+<h3 class="mb-4 fw-bold">My Cart 🛒</h3>
+
+<% if (cart.length === 0) { %>
+    <div class="alert alert-info">
+        Your cart is empty.
+    </div>
+<% } else { %>
+
+<div class="card shadow border-0 p-4">
+
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% cart.forEach(item => { %>
+                <tr>
+                    <td><%= item.name %></td>
+                    <td>₹ <%= item.price %></td>
+                    <td><%= item.quantity %></td>
+                    <td>₹ <%= item.price * item.quantity %></td>
+                    <td>
+                        <a href="/remove-from-cart/<%= item.productId %>"
+                           class="btn btn-sm btn-danger">
+                           Remove
+                        </a>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <h4 class="text-end fw-bold text-success mt-3">
+        Grand Total: ₹ <%= total %>
+    </h4>
+
+    <a href="/checkout"
+       class="btn btn-success mt-3 float-end">
+       Proceed to Checkout
+    </a>
+
+</div>
+
+<% } %>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,37 @@
+<%- include('../partials/header', { user }) %>
+
+<div class="card shadow p-4">
+
+    <div class="alert alert-success">
+        <i class="fa-solid fa-circle-check me-2"></i>
+        Order placed successfully!
+    </div>
+
+    <h4 class="fw-bold mb-3">Order Details</h4>
+
+    <p><strong>Order ID:</strong> <%= order._id %></p>
+    <p><strong>Total:</strong> ₹ <%= order.totalAmount %></p>
+    <p><strong>Shipping Address:</strong> <%= order.address %></p>
+    <p><strong>Phone:</strong> <%= order.phone %></p>
+    <p><strong>Status:</strong> 
+        <span class="badge bg-warning text-dark">
+            <%= order.status %>
+        </span>
+    </p>
+
+    <hr>
+
+    <h5>Products</h5>
+
+    <ul class="list-group">
+        <% order.items.forEach(item => { %>
+            <li class="list-group-item d-flex justify-content-between">
+                <span><%= item.name %> (x<%= item.quantity %>)</span>
+                <span>₹ <%= item.price * item.quantity %></span>
+            </li>
+        <% }) %>
+    </ul>
+
+</div>
+
+<%- include('../partials/footer') %>
